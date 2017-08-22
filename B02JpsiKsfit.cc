@@ -3,8 +3,6 @@
 #include "TNtuple.h"
 #include "TCanvas.h"
 #include "TMath.h"
-#include "BParticle.h"
-#include "BEvent.h"
 #include "RooRealVar.h"
 #include "RooGaussian.h"
 #include "RooAddPdf.h"
@@ -14,14 +12,33 @@
 
 using namespace RooFit;
 
-void example_04()
+void B02JpsiKsfit()
 {
-    TFile *fin = new TFile( "jpsi.root" );
+    TFile *fin = new TFile( "~/pyexercise/B02JpsiKs_output" );
     
-    TTree *T;
-    fin->GetObject("T",T);
+    TTree *h1;
+    fin->GetObject("h1",h1);
+    //Open B02JpsiKs TTree
+    float B0_mbc;
+    float B0_deltae;
     
-    BEvent* Event = new BEvent();
+    h1->SetBranchStatus("*",0);
+    h1->SetBranchStatus("B0_mbc",0);
+    h1->SetBranchStatus("B0_deltae",0);
+    h1->SetBranchAddress("B0_mbc",&B0_mbc);
+    h1->SetBranchAddress("B0_deltae",&B0_deltae);
+    //Set branch address
+    
+    TNtuple* n1 = new TNtuple ("B0","B0","B0_mbc:B0_deltae");
+    float var[2];
+    for (int idx=0;idx<(int)h1->GetEntries();idx++){
+        h1->GetEntry(idx);
+        var[0]=B0_mbc;
+        var[1]=B0_deltae;
+        n1->Fill(var);
+    }
+    //Get entries from TTree
+    /*BEvent* Event = new BEvent();
     T->SetBranchAddress("BEvent",&Event);
     
     TNtuple* n_jpsi = new TNtuple ( "n_jpsi", "Invariant Mass of #mu^{+}#mu^{-}", "mass");
@@ -54,8 +71,8 @@ void example_04()
                 if (Mass>2.7 && Mass<3.4) n_jpsi->Fill(Mass);
             }
         }
-    }
-    
+    }*/
+    //old code for n_jpsi
     RooRealVar mass("mass","mass",2.7,3.4);
     
     RooRealVar nbkg("nbkg","nbkg", 6000., 0.,9000.);
