@@ -73,26 +73,26 @@ void B02JpsiKsfit()
         }
     }*/
     //old code for n_jpsi
-    RooRealVar mass("mass","mass",2.7,3.4);
+    RooRealVar mass("mass","mass",5.2,5.29);
     
-    RooRealVar nbkg("nbkg","nbkg", 6000., 0.,9000.);
-    RooRealVar area("area","area", 1000., 0.,4000.);
-    RooRealVar slope("slope","slope",-0.5, -10.,  10.);
-    RooRealVar mean("mean","mean",  3.09, 3., 3.2 );
-    RooRealVar width("width","width", 0.01, 0.0001, 0.05);
+    RooRealVar nbkg("nbkg","nbkg", 60000., 0.,90000.);
+    RooRealVar area("area","area", 2000., 0.,8000.);
+    RooRealVar slope("slope","slope",0., -10.,  10.);
+    RooRealVar mean("mean","mean",  5.28, 5.2, 5.29 );
+    RooRealVar width("width","width", 0.02, 0.0001, 0.05);
     
     RooGaussian gaussian("gaussian","gaussian",mass,mean,width);
     RooChebychev linear("linear","linear",mass,RooArgList(slope));
     
     RooAddPdf model("model","model",RooArgList(gaussian,linear),RooArgList(area,nbkg));
     
-    RooDataSet *data = new RooDataSet("data","data",n_jpsi,RooArgSet(mass));
+    RooDataSet *data = new RooDataSet("data","data",n1,RooArgSet(B0_mbc));
     
     model.fitTo(*data,Extended(kTRUE),Minos(kTRUE));
     
     TCanvas* c1 = new TCanvas("c1","c1",600,400);
     
-    RooPlot* frame = mass.frame();
+    RooPlot* frame = n1.frame();
     data->plotOn(frame,Binning(140));
     model.plotOn(frame,LineWidth(3));
     frame->Draw();
