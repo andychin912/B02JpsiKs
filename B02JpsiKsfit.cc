@@ -14,7 +14,7 @@ using namespace RooFit;
 
 void B02JpsiKsfit()
 {
-    TFile *fin = new TFile( "~/pyexercise/B02JpsiKs_output" );
+    TFile *fin = new TFile( "~/pyexercise/B02JpsiKs_output.root" );
     
     TTree *h1;
     fin->GetObject("h1",h1);
@@ -23,13 +23,13 @@ void B02JpsiKsfit()
     float B0_deltae;
     
     h1->SetBranchStatus("*",0);
-    h1->SetBranchStatus("B0_mbc",0);
-    h1->SetBranchStatus("B0_deltae",0);
+    h1->SetBranchStatus("B0_mbc",1);
+    h1->SetBranchStatus("B0_deltae",1);
     h1->SetBranchAddress("B0_mbc",&B0_mbc);
     h1->SetBranchAddress("B0_deltae",&B0_deltae);
     //Set branch address
     
-    TNtuple* n1 = new TNtuple ("B0","B0","B0_mbc:B0_deltae");
+    TNtuple* n1 = new TNtuple ("n1","B0","mass:deltae");
     float var[2];
     for (int idx=0;idx<(int)h1->GetEntries();idx++){
         h1->GetEntry(idx);
@@ -37,6 +37,7 @@ void B02JpsiKsfit()
         var[1]=B0_deltae;
         n1->Fill(var);
     }
+
     //Get entries from TTree
     /*BEvent* Event = new BEvent();
     T->SetBranchAddress("BEvent",&Event);
@@ -75,8 +76,8 @@ void B02JpsiKsfit()
     //old code for n_jpsi
     RooRealVar mass("mass","mass",5.2,5.29);
     
-    RooRealVar nbkg("nbkg","nbkg", 60000., 0.,90000.);
-    RooRealVar area("area","area", 2000., 0.,8000.);
+    RooRealVar nbkg("nbkg","nbkg", 1000.);
+    RooRealVar area("area","area", 50000.);
     RooRealVar slope("slope","slope",0., -10.,  10.);
     RooRealVar mean("mean","mean",  5.28, 5.2, 5.29 );
     RooRealVar width("width","width", 0.02, 0.0001, 0.05);
@@ -86,14 +87,14 @@ void B02JpsiKsfit()
     
     RooAddPdf model("model","model",RooArgList(gaussian,linear),RooArgList(area,nbkg));
     
-    RooDataSet *data = new RooDataSet("data","data",n1,RooArgSet(B0_mbc));
+    RooDataSet *data = new RooDataSet("data","data",n1,RooArgSet(mass));
     
     model.fitTo(*data,Extended(kTRUE),Minos(kTRUE));
     
     TCanvas* c1 = new TCanvas("c1","c1",600,400);
     
-    RooPlot* frame = n1.frame();
-    data->plotOn(frame,Binning(140));
+    RooPlot* frame = mass.frame();
+    data->plotOn(frame,Binning(1000));
     model.plotOn(frame,LineWidth(3));
     frame->Draw();
 }
