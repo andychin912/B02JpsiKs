@@ -8,7 +8,7 @@ variables.addAlias('Jpsieid','daughter(0,eid)')
 variables.addAlias('Jpsimuid','daughter(0,muid)')
 variables.addAlias('myRank','extraInfo(myRank)')
 
-inputMdstList('default',['~/pyexercise/B_JpsiKs.root','~/pyexercise/output.root'])
+inputMdstList('default',['~/B02JpsiKs/B02Jpsi_ee_Ks_mdst.root','~/B02JpsiKs/B02Jpsi_mumu_Ks_mdst.root'])
 
 fillParticleList('mu+:all','')
 fillParticleList('e+:all','')
@@ -29,7 +29,7 @@ set_log_level(LogLevel.ERROR)
 
 
 
-ntupleFile('B02Jpsi_ks-output.root')
+ntupleFile('B02JpsiKs_output2.root')
 
 toolsB = ['EventMetaData', '^B0']
 toolsB += ['DeltaEMbc','^B0']

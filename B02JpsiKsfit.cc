@@ -76,8 +76,8 @@ void B02JpsiKsfit()
     //old code for n_jpsi
     RooRealVar mass("mass","mass",5.2,5.29);
     
-    RooRealVar nbkg("nbkg","nbkg", 1000.);
-    RooRealVar area("area","area", 50000.);
+    RooRealVar nbkg("nbkg","nbkg", 8000.);
+    RooRealVar area("area","area", 60000.);
     RooRealVar slope("slope","slope",0., -10.,  10.);
     RooRealVar mean("mean","mean",  5.28, 5.2, 5.29 );
     RooRealVar width("width","width", 0.02, 0.0001, 0.05);
